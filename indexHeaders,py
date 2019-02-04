@@ -1,21 +1,24 @@
-"""
-A simple system to create a dict containing key calls to header cells, and their corresponding ndx
+""""""A simple system to create a dict containing key calls to header column indexes
 
-import indexHeaders
+In order to facilitate easier header enabled spreadsheet parsing, this module aims to simplify the
+process of column indexing, by using a given dictionary of reference keys to header values and
+returning a dictionary of those same reference keys with the stated headers' column index
 
-To create a flexible pointer system, a simple system of pointers must be created.
+    Assuming we're using header row...
+header_row = ["Date", "Status", "TrackingID", "VulnTitle", "DNSHostname", "OperatingSystem"]
+    Create and provide a head_names dict like so
 
-# If header "DNSHostname" is in CSV column 7...
-NEW_NDX = {}
-counter = 0 # indexer
-for header in CSVheaders:
-    NDX_ALL[header] = counter
-    counter += 1
-HEAD_NAMES = {"Hostname": "DNSHostname"}
-# Create new NEW_NDX entries based on HEAD_NAMES entries, using indexes stored in NDX_ALL
-for Key in HEAD_NAMES:
-    NEW_NDX[Key] = NDX_ALL[Key]
-# ...then NEW_NDX["Hostname"] = 7
+headers_dict = {
+    "hostname":     "DNSHostname",
+    "stat":         "Status"
+}
+
+index_headers(sheet_headers=header_row, head_names=headers_dict) will return
+
+ndx_calc = {
+    "hostname": 4,
+    "stat": 1
+}
 """
 from typing import List
 
