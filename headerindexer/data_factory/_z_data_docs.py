@@ -1,3 +1,5 @@
+"""Documentation for data factory classes"""
+
 from typing import List as _List, Dict as _Dict
 
 
@@ -36,7 +38,8 @@ class SettingsDocs:
     """Base object for HeaderIndexer boolean flags. Build and set with Factory"""
 
     raise_error = False
-    """Raise ValueError If any non_indexed or duplicate headers"""
+    """Raise ValueError If any non_indexed or duplicate headers are found. If true, no query to fix 
+    and nothing will return"""
 
     return_affected = False
     """Returns Tuple[dict] (ndx_calc, non_indexed, duplicates)"""
@@ -48,7 +51,8 @@ class SettingsDocs:
     """Gathers duplicate headers into Dict[str, int]"""
 
     prompt_fix = True
-    """Call single stage menu to fix non indexed headers by Id-ing proper headers"""
+    """Call single stage menu to fix non indexed headers by Id-ing proper headers
+    Note, at this time it does not check for duplicate headers"""
 
     def reset(self,
               raise_error=False,

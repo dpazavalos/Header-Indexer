@@ -1,3 +1,7 @@
+"""Hard copy of pycolims 0.2.0, rather than forced dependency.
+https://github.com/dpazavalos/pycolims
+"""
+
 name = 'pycolims'
 
 

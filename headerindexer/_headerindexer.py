@@ -1,9 +1,10 @@
-from headerindexer.factory import Settings, Errors, Workings, build
-from typing import List, Dict, Union
+"""HeaderIndexer engine, with documentation imported from _z_headerindexer_docs"""
+
+from headerindexer._z_headerindexer_docs import HeaderIndexerDocs
 
 
-class HeaderIndexer:
-    """Base header Indexer class"""
+class HeaderIndexer(HeaderIndexerDocs):
+
     def __init__(self,
                  raise_error=False,
                  return_affected=False,
@@ -11,29 +12,27 @@ class HeaderIndexer:
                  check_duplicates=False,
                  prompt_fix=True):
 
-        self._settings: Settings = build.new_settings_obj(
-            raise_error=raise_error,
-            return_affected=return_affected,
-            check_nonindexed=check_nonindexed,
-            check_duplicates=check_duplicates,
-            prompt_fix=prompt_fix,
-        )
-        """Dataclass for persistent settings object"""
+        self.__setattr__('_settings',
+                         self._builder.new_settings_obj(
+                            raise_error=raise_error,
+                            return_affected=return_affected,
+                            check_nonindexed=check_nonindexed,
+                            check_duplicates=check_duplicates,
+                            prompt_fix=prompt_fix,
+                            )
+                         )
 
-        self._errors: Errors = build.new_errors_obj()
-        """Dataclass for _error_string, _nonindexed, and _duplicates"""
+        self.__setattr__('_errors',
+                         self._builder.new_errors_obj())
 
-        self._work: Workings = build.new_workings_obj()
-        """Dataclass for working data _sheet_headers, _head_names, _ndx_calc"""
+        self.__setattr__('_work',
+                         self._builder.new_workings_obj())
 
-    def _prep_non_persistents(self, sheet_headers: List[str], head_names: Dict[str, str]) -> None:
-        """Clears and sets all public dicts and lists in preparation for a fresh run"""
+    def _prep_non_persistents(self, sheet_headers, head_names):
         self._errors.reset()
         self._work.reset(sheet_headers, head_names)
 
-    def _gen_ndx_calc(self) -> None:
-        """Create a dictionary using head_name keys,
-        traducting head_name values into header indexes"""
+    def _gen_ndx_calc(self):
         # Cross-check reference against corresponding reference's index from sheet_headers_index
         for reference, header in self._work.head_names.items():
             try:
@@ -42,8 +41,7 @@ class HeaderIndexer:
                 # Use None to mark missing or bad indexed, and address in later checks
                 self._work.ndx_calc[reference] = None
 
-    def _check_nonindexed(self) -> None:
-        """Checks for any references not found"""
+    def _check_nonindexed(self):
         if self._settings.check_nonindexed is True:
             for reference in self._work.ndx_calc:
                 print(reference, self._work.ndx_calc[reference])
@@ -54,10 +52,10 @@ class HeaderIndexer:
             if self._errors.nonindexed and self._settings.raise_error is True:
                 self._add_to_error_string("Non indexed headers!", self._errors.nonindexed)
 
-    def _check_duplicates(self) -> None:
+    def _check_duplicates(self):
+        # Checks for any indexes with multiple bound references, via default set dict
         if self._settings.check_duplicates is True:
-            """Checks for any indexes with multiple bound references"""
-            dup_check: Dict[int, set] = {}
+            dup_check = {}
             # Create a reverse dict of found index #s, with bound references in a set as values
             for reference, index in self._work.ndx_calc.items():
                 dup_check.setdefault(index, set()).add(reference)
@@ -71,19 +69,16 @@ class HeaderIndexer:
             if self._errors.duplicates and self._settings.raise_error is True:
                 self._add_to_error_string("Duplicate header indexes!", self._errors.duplicates)
 
-    def _add_to_error_string(self, header: str, error_arr: Union[dict, list]) -> None:
-        """Add header and list breakdown to stderr string"""
+    def _add_to_error_string(self, header, error_arr):
         self._errors.stderr += header + '\n'
         self._errors.stderr += '\n'.join(str(f'    {x}') for x in error_arr.items()) + '\n'
 
-    def _raise_value_error(self) -> None:
-        """Raises ValueError if allowed and needed (Nonindexed values, duplicates)"""
+    def _raise_value_error(self):
         if self._settings.raise_error is True:
             if self._errors.duplicates or self._errors.nonindexed:
                 raise ValueError(self._errors.stderr)
 
-    def _query_fix_nonindexed(self) -> None:
-        """Runs single menu select for non indexed """
+    def _query_fix_nonindexed(self):
         if self._settings.prompt_fix is True and self._errors.nonindexed:
 
             from headerindexer.pycolims_0_2_0 import Single
@@ -99,14 +94,7 @@ class HeaderIndexer:
                 for non_indexed in self._errors.nonindexed[::-1]:
                     header = f"Select header for reference: {non_indexed}"
                     chosen_ndx = menu_single.run(self._work.sheet_headers_indexes, header)
-
-                    # print('chosen_ndx')
-                    # input(chosen_ndx)
-
                     answer = self._work.sheet_headers_indexes[chosen_ndx]
-                    print(chosen_ndx)
-                    print(answer)
-                    input()
 
                     if answer is not False:
                         # Add found index, or None, to ndx_calc to return
@@ -116,14 +104,12 @@ class HeaderIndexer:
                         new_nonindexed = non_indexed
                 self._errors.nonindexed = new_nonindexed
 
-    def _return_ndx_calc(self) -> Union[tuple, dict]:
-        """Returns either ndx_calc or Tuple[ndx_calc, nonindexed, duplicates},
-        self._settings.return_affected"""
+    def _return_ndx_calc(self):
         if self._settings.return_affected is True:
             return self._work.ndx_calc, self._errors.nonindexed, self._errors.duplicates
         return self._work.ndx_calc
 
-    def run(self, sheet_headers: List[str], head_names: Dict[str, str]) -> Union[tuple, dict]:
+    def run(self, sheet_headers, head_names):
         self._prep_non_persistents(sheet_headers.copy(), head_names.copy())
         self._gen_ndx_calc()
         self._check_nonindexed()

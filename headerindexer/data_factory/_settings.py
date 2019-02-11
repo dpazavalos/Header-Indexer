@@ -1,7 +1,7 @@
 """External module of headerIndexer settings. Reset on each run"""
 # Excessive arg passing to prevent inheritance issues and maintain doc info
 
-from headerindexer.factory._z_docs import SettingsDocs, SettingsFactoryDocs
+from headerindexer.data_factory._z_data_docs import SettingsDocs, SettingsFactoryDocs
 
 
 class Settings(SettingsDocs):

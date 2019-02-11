@@ -1,12 +1,10 @@
-"""External module of headerIndexer working data. Reset on each run"""
+"""External module of headerIndexer working data. Reset on each run
+No init setup, requires startup data passed through reset (Sheet_headers, head_names)"""
 
-from headerindexer.factory._z_docs import WorkingsDocs, WorkingsFactoryDocs
+from headerindexer.data_factory._z_data_docs import WorkingsDocs, WorkingsFactoryDocs
 
 
 class Workings(WorkingsDocs):
-
-    # def __init__(self, sheet_headers, head_names):
-    #     """Do not set item on build. """
 
     def reset(self, sheet_headers, head_names):
 
@@ -22,10 +20,8 @@ class WorkingsFactory(WorkingsFactoryDocs):
 
     @staticmethod
     def _return_workings_obj():
-        # return Workings(sheet_headers, head_names)
         return Workings()
 
     def new_workings_obj(self):
-        # workings_to_return = self._return_workings_obj(sheet_headers, head_names)
         workings_to_return = self._return_workings_obj()
         return workings_to_return

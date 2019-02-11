@@ -1,6 +1,6 @@
 """Storage for errors or unfound indexes. Reset on each run"""
 
-from headerindexer.factory._z_docs import ErrorsDocs, ErrorsFactoryDocs
+from headerindexer.data_factory._z_data_docs import ErrorsDocs, ErrorsFactoryDocs
 
 
 class Errors(ErrorsDocs):
