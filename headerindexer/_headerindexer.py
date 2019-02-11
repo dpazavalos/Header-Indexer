@@ -42,11 +42,6 @@ class HeaderIndexer:
                 # Use None to mark missing or bad indexed, and address in later checks
                 self._work.ndx_calc[reference] = None
 
-    def _add_to_error_string(self, header: str, error_arr: Union[dict, list]) -> None:
-        """Add header and list breakdown to stderr string"""
-        self._errors.stderr += header + '\n'
-        self._errors.stderr += '\n'.join(str(f'    {x}') for x in error_arr.items()) + '\n'
-
     def _check_nonindexed(self) -> None:
         """Checks for any references not found"""
         if self._settings.check_nonindexed is True:
@@ -73,8 +68,13 @@ class HeaderIndexer:
                         self._errors.duplicates[ref] = index
 
             # Prepare string out to display problem headers
-            if self._errors.duplicates and self._settings.return_affected is True:
+            if self._errors.duplicates and self._settings.raise_error is True:
                 self._add_to_error_string("Duplicate header indexes!", self._errors.duplicates)
+
+    def _add_to_error_string(self, header: str, error_arr: Union[dict, list]) -> None:
+        """Add header and list breakdown to stderr string"""
+        self._errors.stderr += header + '\n'
+        self._errors.stderr += '\n'.join(str(f'    {x}') for x in error_arr.items()) + '\n'
 
     def _raise_value_error(self) -> None:
         """Raises ValueError if allowed and needed (Nonindexed values, duplicates)"""
