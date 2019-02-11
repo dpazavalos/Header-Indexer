@@ -1,4 +1,4 @@
-""""""A simple system to create a dict containing key calls to header column indexes
+"""A simple system to create a dict containing key calls to header column indexes
 
 In order to facilitate easier header enabled spreadsheet parsing, this module aims to simplify the
 process of column indexing, by using a given dictionary of reference keys to header values and

@@ -102,8 +102,9 @@ class WorkingsFactoryDocs:
     """Factory to generate a Workings object for HeaderIndexer"""
 
     @staticmethod
-    def _return_workings_obj(sheet_headers, head_names):
+    def _return_workings_obj():
         """Return new Workings object"""
 
-    def new_workings_obj(self, sheet_headers: _List[str], head_names: _Dict[str, str]):
+    # def new_workings_obj(self, sheet_headers: _List[str], head_names: _Dict[str, str]):
+    def new_workings_obj(self):
         """Call to build, init, and return a new errors object"""

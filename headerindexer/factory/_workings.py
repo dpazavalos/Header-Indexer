@@ -5,8 +5,8 @@ from headerindexer.factory._z_docs import WorkingsDocs, WorkingsFactoryDocs
 
 class Workings(WorkingsDocs):
 
-    def __init__(self, sheet_headers, head_names):
-        self.reset(sheet_headers, head_names)
+    # def __init__(self, sheet_headers, head_names):
+    #     """Do not set item on build. """
 
     def reset(self, sheet_headers, head_names):
 
@@ -21,9 +21,11 @@ class Workings(WorkingsDocs):
 class WorkingsFactory(WorkingsFactoryDocs):
 
     @staticmethod
-    def _return_workings_obj(sheet_headers, head_names):
-        return Workings(sheet_headers, head_names)
+    def _return_workings_obj():
+        # return Workings(sheet_headers, head_names)
+        return Workings()
 
-    def new_workings_obj(self, sheet_headers, head_names):
-        workings_to_return = self._return_workings_obj(sheet_headers, head_names)
+    def new_workings_obj(self):
+        # workings_to_return = self._return_workings_obj(sheet_headers, head_names)
+        workings_to_return = self._return_workings_obj()
         return workings_to_return
