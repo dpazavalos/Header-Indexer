@@ -1,19 +1,16 @@
 """Accessible aggregate of Data documents and factory object 'build'"""
-
-from headerindexer.data_factory._errors import ErrorsFactory as _ErrorsFactory
-# from headerindexer.data_factory._settings import SettingsFactory as _SettingsFactory
-from headerindexer.data_factory._workings import WorkingsFactory as _WorkingsFactory
+from . import _errors, _workings
 
 
-class Errors:
+class Errors(_errors.Errors):
     pass
 
 
-class Workings:
+class Workings(_workings.Workings):
     pass
 
 
-class _Factory(_ErrorsFactory, _WorkingsFactory):
+class _Factory(_errors.ErrorsFactory, _workings.WorkingsFactory):
     """Factory to build dataclass objects. See build below for use"""
 
 

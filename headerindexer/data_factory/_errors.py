@@ -13,8 +13,8 @@ class Errors:
     duplicates: Dict[str, int] = []
     """Dict of reference headers that were found more than once"""
 
-    def reset(self):
-        """Resets all Error holders to default"""
+    def set(self):
+        """Sets all Error holders to default"""
         self.stderr -= self.stderr
         self.nonindexed.clear()
         self.duplicates.clear()

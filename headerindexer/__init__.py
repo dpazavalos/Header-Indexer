@@ -26,7 +26,7 @@ class HeaderIndexer:
     def _prep_non_persistents(self, sheet_headers, head_names):
         """Clears and sets all public dicts and lists in preparation for a fresh run"""
         self._errors.reset()
-        self._work.reset(sheet_headers, head_names)
+        self._work.set(sheet_headers, head_names)
 
     def _gen_ndx_calc(self):
         """Create a dictionary using head_name keys,
