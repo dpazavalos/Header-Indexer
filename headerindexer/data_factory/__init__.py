@@ -3,15 +3,13 @@
 from headerindexer.data_factory._errors import ErrorsFactory as _ErrorsFactory
 # from headerindexer.data_factory._settings import SettingsFactory as _SettingsFactory
 from headerindexer.data_factory._workings import WorkingsFactory as _WorkingsFactory
-from headerindexer.data_factory._z_data_docs import SettingsDocs as _SettingsDocs, \
-    ErrorsDocs as _ErrorsDocs, WorkingsDocs as _WorkingsDocs
 
 
-class Errors(_ErrorsDocs):
+class Errors:
     pass
 
 
-class Workings(_WorkingsDocs):
+class Workings:
     pass
 
 

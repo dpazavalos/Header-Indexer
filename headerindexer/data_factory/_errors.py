@@ -1,28 +1,34 @@
-"""Storage for errors or unfound indexes. Reset on each run"""
+"""Storage for errors or non-found indexes. Reset on each run"""
 
-from headerindexer.data_factory._z_data_docs import ErrorsDocs, ErrorsFactoryDocs
+from typing import List, Dict
 
 
-class Errors(ErrorsDocs):
+class Errors:
+    """Storage for errors or non-found indexes. Includes reset function"""
 
-    def __init__(self):
-        self.reset()
+    stderr: str = ''
+    """Error string, to be stderr (dependant on self._settings.raise_error)"""
+    nonindexed: List[str] = []
+    """Dict of reference headers that were not found in self.sheet_headers"""
+    duplicates: Dict[str, int] = []
+    """Dict of reference headers that were found more than once"""
 
     def reset(self):
-
-        self.__setattr__('stderr', '\n')
-
+        """Resets all Error holders to default"""
+        self.stderr -= self.stderr
         self.nonindexed.clear()
-
         self.duplicates.clear()
 
 
-class ErrorsFactory(ErrorsFactoryDocs):
+class ErrorsFactory:
+    """Factory to generate an Errors object for HeaderIndexer"""
 
     @staticmethod
     def _return_errors_obj():
+        """Return new Errors object"""
         return Errors()
 
     def new_errors_obj(self):
+        """Call to build, init, and return a new errors object"""
         errors_to_return = self._return_errors_obj()
         return errors_to_return

@@ -4,7 +4,7 @@
 
 """HeaderIndexer engine, with documentation imported from _z_headerindexer_docs"""
 
-from headerindexer.data_factory import Errors, Workings, build
+from headerindexer.data_factory import Errors, Workings, build as _builder
 from typing import List, Dict, Union
 
 
@@ -16,9 +16,6 @@ class HeaderIndexer:
         HeaderIndexer
 
         """
-
-        _builder: build = build
-        """init data factory object, to build above data objects"""
 
         self._errors: Errors = _builder.new_errors_obj()
         """Dataclass for _error_string, _nonindexed, and _duplicates. Resets each run()"""
