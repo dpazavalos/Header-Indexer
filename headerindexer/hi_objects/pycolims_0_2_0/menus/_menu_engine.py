@@ -2,9 +2,8 @@
 of menu functions"""
 
 from typing import List, Dict, Tuple, Union
-from headerindexer.pycolims_0_2_0.menus.data import data_factory as df
-
-from headerindexer.pycolims_0_2_0.menus._base_menu_template import MenuTemplate
+from .data import data_factory as df
+from ._base_menu_template import MenuTemplate
 
 
 class MenuEngine(MenuTemplate):

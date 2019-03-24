@@ -1,4 +1,4 @@
-from headerindexer.pycolims_0_2_0.menus import _menu_single, _menu_multi
+from . import _menu_multi, _menu_single
 
 
 class SingleMenu(_menu_single.SelectSingle):

@@ -1,5 +1,5 @@
 """
-Template and factory for unique Work object, where matrix data is passed to and parsed. Stored
+Template for unique Work object, where matrix data is passed to and parsed. Stored
 """
 
 from typing import Dict, List, Union, Iterable
@@ -67,17 +67,3 @@ class Work:
             except IndexError:
                 pass
         raise IndexError
-
-
-class WorkingsFactory:
-    """Factory to generate a Work object for HeaderIndexer"""
-
-    @staticmethod
-    def _return_workings_obj():
-        """Return new Work object"""
-        return Work()
-
-    def new_workings_obj(self):
-        """Call to build, init, and return a new errors object"""
-        workings_to_return = self._return_workings_obj()
-        return workings_to_return

@@ -18,17 +18,3 @@ class Errors:
         self.stderr -= self.stderr
         self.nonindexed.clear()
         self.duplicates.clear()
-
-
-class ErrorsFactory:
-    """Factory to generate an Errors object for HeaderIndexer"""
-
-    @staticmethod
-    def _return_errors_obj():
-        """Return new Errors object"""
-        return Errors()
-
-    def new_errors_obj(self):
-        """Call to build, init, and return a new errors object"""
-        errors_to_return = self._return_errors_obj()
-        return errors_to_return

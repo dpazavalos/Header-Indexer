@@ -1,4 +1,4 @@
-from headerindexer.pycolims_0_2_0.menus.data import _command, _terminal, _work, _pages
+from . import _command, _terminal, _work, _pages
 
 
 class Command(_command.Command):
