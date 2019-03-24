@@ -22,7 +22,7 @@ class Pages:
     active_turners: _List[str] = None
 
     def set(self, page_options: _List[str], goto_multipliers: _List[int]):
-        """Generic Set/Reset function. To be set-reset by each child menu on their runs"""
+        """Generic Set/Reset function. To be gen_ndx_calc-reset by each child menu on their runs"""
 
         self.goto_multi: int = 0
         """Reflection of active ndx"""

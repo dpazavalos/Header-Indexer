@@ -8,7 +8,7 @@ get_active() -> any:
     Returns item from list using active ndx
 
 set_ndx(new_ndx: int) -> None
-    Attempts to set active ndx.
+    Attempts to gen_ndx_calc active ndx.
     Raises a Value Error if given ndx is outside list ndx
 
 crement(cmd: str, return_value=False) -> Optional[int]:

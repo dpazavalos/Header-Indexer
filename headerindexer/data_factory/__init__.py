@@ -6,7 +6,7 @@ class Errors(_errors.Errors):
     pass
 
 
-class Workings(_workings.Workings):
+class Work(_workings.Work):
     pass
 
 

@@ -4,7 +4,7 @@
 
 """HeaderIndexer engine, with documentation imported from _z_headerindexer_docs"""
 
-from headerindexer.data_factory import Errors, Workings, build as _builder
+from headerindexer.data_factory import Errors, Work, build as _builder
 from typing import List, Dict, Union
 
 
@@ -20,24 +20,8 @@ class HeaderIndexer:
         self._errors: Errors = _builder.new_errors_obj()
         """Dataclass for _error_string, _nonindexed, and _duplicates. Resets each run()"""
 
-        self._work: Workings = _builder.new_workings_obj()
+        self._work: Work = _builder.new_workings_obj()
         """Dataclass for working data _sheet_headers, _head_names, _ndx_calc. Resets each run()"""
-
-    def _prep_non_persistents(self, sheet_headers, head_names):
-        """Clears and sets all public dicts and lists in preparation for a fresh run"""
-        self._errors.reset()
-        self._work.set(sheet_headers, head_names)
-
-    def _gen_ndx_calc(self):
-        """Create a dictionary using head_name keys,
-        traducting head_name values into header indexes"""
-        # Cross-check reference against corresponding reference's index from sheet_headers_index
-        for reference, header in self._work.head_names.items():
-            try:
-                self._work.ndx_calc[reference] = self._work.sheet_headers_indexes[header]
-            except (IndexError, KeyError):
-                # Use None to mark missing or bad indexed, and address in later checks
-                self._work.ndx_calc[reference] = None
 
     def _check_nonindexed(self):
         """Checks for any references not found, if self._settings.check_nonindexed = True"""
@@ -53,9 +37,9 @@ class HeaderIndexer:
 
     def _check_duplicates(self):
         """Checks for any duplicate reference ndx, if self._settings.check_duplicates = True"""
-        # Checks for any indexes with multiple bound references, via default set dict
+        # Checks for any indexes with multiple bound references, via default gen_ndx_calc dict
         dup_check = {}
-        # Create a reverse dict of found index #s, with bound references in a set as values
+        # Create a reverse dict of found index #s, with bound references in a gen_ndx_calc as values
         for reference, index in self._work.ndx_calc.items():
             dup_check.setdefault(index, set()).add(reference)
         # Check if any indexes correspond to more than one reference
@@ -90,13 +74,13 @@ class HeaderIndexer:
 
             if fix_choice[menu_single.run(fix_choice, header)] is True:
                 new_nonindexed = []
-                self._work.sheet_headers_indexes['! Mark as not found !'] = False
-                self._work.sheet_headers_indexes["! Leave as 'None'   !"] = None
+                self._work.matrix_headers_index_dict['! Mark as not found !'] = False
+                self._work.matrix_headers_index_dict["! Leave as 'None'   !"] = None
 
                 for non_indexed in self._errors.nonindexed[::-1]:
                     header = f"Select header for reference: {non_indexed}"
-                    chosen_ndx = menu_single.run(self._work.sheet_headers_indexes, header)
-                    answer = self._work.sheet_headers_indexes[chosen_ndx]
+                    chosen_ndx = menu_single.run(self._work.matrix_headers_index_dict, header)
+                    answer = self._work.matrix_headers_index_dict[chosen_ndx]
 
                     if answer is not False:
                         # Add found index, or None, to ndx_calc to return
@@ -109,10 +93,14 @@ class HeaderIndexer:
     def run(self, sheet_headers, head_names):
         """Run HeaderIndexer on given sheet_headers list, using head_names dict to generate a
         new nex dict containing header indexes"""
-        self._prep_non_persistents(sheet_headers.copy(), head_names.copy())
-        self._gen_ndx_calc()
+
+        # Take headers and head_names, and create ndx_calc
+        self._work.gen_ndx_calc(sheet_headers, head_names)
+
+        # Begin identifying any errors in the parsing
+        self._errors.set()
         self._check_nonindexed()
-        # self._check_duplicates()
+
         self._raise_value_error()
         self._query_fix_nonindexed()
         return self._work.ndx_calc
