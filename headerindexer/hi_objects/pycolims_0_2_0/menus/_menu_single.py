@@ -14,7 +14,7 @@ class SelectSingle(MenuEngine):
             print(to_print)
 
     def prep_page(self):
-        """Use self.page.gen_ndx_calc to prepare page turners"""
+        """Use self.page.set to prepare page turners"""
         self.page.set(page_options=self.command.single_def,
                       goto_multipliers=self.generate_goto_multipliers())
 

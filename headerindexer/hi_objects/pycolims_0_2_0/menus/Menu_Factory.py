@@ -1,4 +1,4 @@
-from . import _menu_multi, _menu_single
+from . import _menu_single, _menu_multi
 
 
 class SingleMenu(_menu_single.SelectSingle):

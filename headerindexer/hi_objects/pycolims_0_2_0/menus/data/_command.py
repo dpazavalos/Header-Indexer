@@ -1,7 +1,7 @@
 """Commands used by navigator.
 Pycolims uses the key characters to function; string values are for on screen representation
 Emulation of 3.7 frozen dataclasses.
-Once init, gen_ndx_calc/del function calls will throw SyntaxError to enforce soft immutability"""
+Once init, set/del function calls will throw SyntaxError to enforce soft immutability"""
 
 
 class Command:

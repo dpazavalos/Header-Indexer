@@ -1,4 +1,4 @@
-from . import _cremental_list
+from pycolims.menus.customtypes import _cremental_list
 
 
 class CrementalList(_cremental_list.CrementalList):
@@ -8,7 +8,7 @@ get_active() -> any:
     Returns item from list using active ndx
 
 set_ndx(new_ndx: int) -> None
-    Attempts to gen_ndx_calc active ndx.
+    Attempts to set active ndx.
     Raises a Value Error if given ndx is outside list ndx
 
 crement(cmd: str, return_value=False) -> Optional[int]:

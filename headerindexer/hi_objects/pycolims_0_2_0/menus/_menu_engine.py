@@ -3,11 +3,12 @@ of menu functions"""
 
 from typing import List, Dict, Tuple, Union
 from .data import data_factory as df
+
 from ._base_menu_template import MenuTemplate
 
 
 class MenuEngine(MenuTemplate):
-    """Template with gen_ndx_calc functions to build menus"""
+    """Template with set functions to build menus"""
 
     term: df.Terminal = None
     page: df.Pages = None

@@ -4,7 +4,7 @@ get_active() -> any:
     Returns item from list using active ndx
 
 set_ndx(new_ndx: int) -> None
-    Attempts to gen_ndx_calc active ndx.
+    Attempts to set active ndx.
     Raises a Value Error if given ndx is outside list ndx
 
 crement(cmd: str, return_value=False) -> Optional[int]:
@@ -26,7 +26,7 @@ class CrementalList(list):
         return self.ndx
 
     def set_ndx(self, new_ndx: int) -> None:
-        """Attempts to gen_ndx_calc active ndx.
+        """Attempts to set active ndx.
         Raises a Value Error if given ndx is outside list ndx"""
         if new_ndx < 0 or new_ndx > self.__len__():
             raise ValueError(f'new ndx is outside of list length 0-{self.__len__()}!')

@@ -11,7 +11,7 @@ class Work:
     our ndx_calc. No init setup, pass startup data through gen_ndx_calc(matrix_headers, head_names)
     """
 
-    matrix_headers_index_dict: Dict[str, int]
+    matrix_headers_index_dict: Dict[str, int] = {}
     ndx_calc: Dict[str, int] = {}
 
     def gen_ndx_calc(self, matrix_headers: List[str], head_names: Dict[str, Union[str, Iterable]]):
@@ -64,6 +64,6 @@ class Work:
         for header in headers:
             try:
                 return self.matrix_headers_index_dict[header]
-            except IndexError:
+            except KeyError:
                 pass
         raise IndexError

@@ -1,5 +1,5 @@
 """Storge of terminal settings.
-Note that without curves, windows terminal-ing is limited. Terminal size will only gen_ndx_calc on startup"""
+Note that without curves, windows terminal-ing is limited. Terminal size will only set on startup"""
 
 from shutil import get_terminal_size as _get_terminal_size
 from subprocess import call as _sp_call

@@ -1,21 +1,18 @@
-# todo streamline imports, resort data factories
+"""Administrator object to manage data objects and imports, and coordinate operations"""
 # todo rewrite function arguments (google style), add type defs
-
-"""HeaderIndexer engine"""
 
 from .hi_objects import BUILD as _BUILD
 from typing import Union, List, Dict, Iterable
 
 
-class HeaderIndexer:
+class Indexer:
     """Actual runner"""
 
     def __init__(self, allow_duplicates=True):
         """
 
-        Args:
-            allow_duplicates:
         """
+
         self.indexer = _BUILD.new_header_indexer_core()
         """Core services of our header indexing """
 
@@ -23,18 +20,7 @@ class HeaderIndexer:
         """Fixing services, loaded if header not found"""
 
         self.allow_duplicates = allow_duplicates
-        """Optional arg to raise issue on any duplicate headers"""
-
-    def _fix_nonindexed(self):
-        """In the event a header is not indexed, helper module Fixer is imported and ran. This
-        will identify all non-indexed headers and prompt the user to manually select them, or break
-        and raise an Error."""
-        if not self.fixer:
-            self.fixer = _BUILD.new_fixer_obj()
-
-        self.fixer.check_nonindexed()
-        self.fixer.check_duplicates()
-        self.fixer.query_fix_nonindexed()
+        """Optional setting to allow duplicate header indexes, otherwise will prompt for fix"""
 
     def run(self, sheet_headers: List[str], head_names: Dict[str, Union[str, Iterable]]):
         """Run HeaderIndexer on given sheet_headers list, using head_names dict to generate a
@@ -45,9 +31,17 @@ class HeaderIndexer:
 
         # Begin identifying any errors in the parsing
         self.indexer.errors.set()
+        self.indexer.check_nonindexed()
+        if not self.allow_duplicates:
+            self.indexer.check_duplicates()
 
-        if None in self.indexer.work.ndx_calc.values():
-            # Non Indexed value!
-            self._fix_nonindexed()
+        print(self.indexer.work.matrix_headers_index_dict)
+        input()
+
+        # Prompt to fix
+        if self.indexer.errors.error_exists:
+            if not self.fixer:
+                self.fixer = _BUILD.new_fixer_obj()
+            self.fixer.query_fix_nonindexed()
 
         return self.indexer.work.ndx_calc
