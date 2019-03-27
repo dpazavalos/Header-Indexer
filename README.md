@@ -1,96 +1,46 @@
 # HeaderIndexer
-A simple system to create a dictionary containing given keys to needed header column indexes
+A system to bind aliases to indexes of headers in a matrix. 
 
-In order to facilitate easier spreadsheet parsing, this module aims to simplify the process of 
-indexing columns by their headers. This module finds particular use in situations where spreadsheet
- column orders are inconsistent.
+Given a dict of header aliases paired to the actual header value (or an iterable of possible values)
+creates a dict with entries {'alias': column_index} 
+
+Includes interactive prompts to manually select headers when unable to find, and optional duplicate
+checks for aliases sharing indexes
 
 ## Installation
-
 ```
 pip install headerindexer
 ```
 
 ## Using HeaderIndexer
- 
- 
-Assume we're using a spreadsheet with the following header format:
-```python
-["Date", "Status", "TrackingID", "VulnTitle", "DNSHostname", "OperatingSystem"]
-```
-
-Provide HeaderIndexer a dictionary like so
-
-```python
-headers_dict = {
-#   reference       Header name
-    "hostname":     "DNSHostname",
-    "stat":         "Status"
+ ```python
+from headerindexer import HI
+indexer = HI()
+headers = ["Date", "OS", "TrackingID", "DNSHostname", b"DNSHostname", 77]
+aliases = {
+    b'hostname':     ["DNSHostname", b'DNSHostname'],
+    "track":        ("1TrackingID1", 'TrackingID'),
+    "OS":           "OperatingSystem",
+    7:              77
 }
+aliases_to_indexes = indexer.run(headers, aliases)
+
 ```
 
-HeaderIndexer will compare the given dictionary against the above header row, converting the
-dictionary's values into the actual column indexes. The returned dictionary can be used to 
-reliably call on the appropriate column by given keys ("hostname") 
-even if later formats shuffle columns
-
-In situations where header names alter ("DNSHostname" becomes "Server Hostname") the only 
-adjustment needed is in the headers_dict value section.
-
-
-### HeaderIndexer options
-
-HeaderIndexer has a small set of options to fine tune it to your needs. Below are the default 
-settings and their purposes
-
+Assume we've extracted a row of headers from a spreadsheet. Create a dictionary like aliases, and 
+pass them both to indexer (HI.run()) 
+ 
 ```python
-raise_error = False
-"""Raise ValueError If any non_indexed or duplicate headers are found. If true, no query to fix 
-and nothing will return"""
-
-return_affected = False
-"""If true, Returns a Tuple[dict] (ndx_calc, non_indexed, duplicates)
-If false, returns only the new ndx_calc dictionary"""
-
-check_nonindexed = True
-"""Gathers non_indexed headers into Dict[str, int]. """
-
-check_duplicates = False
-"""Gathers duplicate headers into Dict[str, int]"""
-
-prompt_fix = True
-"""Call single stage menu to fix non indexed headers by Id-ing proper headers
-Note, at this time it does not check for duplicate headers"""
+# aliases_to_indexes, generated above
+{b'hostname': 3, 'track': 2, 'OS': 1, 7: 5}
 ```
+The returned dictionary can be used to reliably call on the appropriate column by given aliases
 
-### Prompt Fix
+### Headers not found/Duplicates headers
 
-There are three inevitabilities in life: death, taxes, and something won't work. HeaderIndexer 
-tries to help with the last
+By default, when an alias' header cannot be located headerindexer will prompt the user to manually 
+select from a list of all headers, one by one
 
-if prompt_fix = True, HeaderIndexer prompts if you wish to manually identify any nonindexed headers.
-If yes, key calls will prompt with headers for you to manually assign. From the menu you can ID
-the proper header, mark as not found (enters into non_indexed and returns in tuple 
-(if return_affected)), or simply leave the value as None.  
+Additionally HI.allow_duplicates can be set to False in or after init, enabling a similar mode of 
+prompting whenever two or more aliases share the same index value 
 
-### Sample code
-
-```python
-from headerindexer import HeaderIndexer
-
-indexer = HeaderIndexer(prompt_fix=True, return_affected=False).run
-spreadsheet = ["Date", "Status", "TrackingID", "Title", "DNSHostname"]
-headers_dict = {
-    "hostname":     "DNSHostname",
-    "track":        "1TrackingID1",
-    "OS":           "1OperatingSystem",
-    "hostname2":    "1DNSHostname"
-}
-ndx_calc = indexer(sheet_headers=spreadsheet, head_names=headers_dict)
-
-print(ndx_calc)
-```
-
-### Finally...
-I am as open as the Texan sky when it comes to issues, comments, and concerns. Feel free to raise 
-github issues or branch if desired. 

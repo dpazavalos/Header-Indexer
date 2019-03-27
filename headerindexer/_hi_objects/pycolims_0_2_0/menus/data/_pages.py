@@ -1,7 +1,7 @@
 """External storage of necessary page turners ('+','-')"""
 
 from typing import List as _List
-from headerindexer.pycolims_0_2_0.menus.customtypes import CrementalList
+from .customtypes import CrementalList
 
 
 class Pages:
