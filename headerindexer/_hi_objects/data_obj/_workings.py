@@ -12,7 +12,7 @@ class Work:
     """
 
     matrix_headers_index_dict: Dict[str, int] = {}
-    ndx_calc: Dict[str, int] = {}
+    ndx_calc: Dict[str, Union[int, None]] = {}
 
     def gen_ndx_calc(self, matrix_headers: List[str], head_names: Dict[str, Union[str, Iterable]]):
         """
@@ -40,7 +40,7 @@ class Work:
         for reference, headers in head_names.items():
 
             # Prep to iterate
-            if isinstance(headers, str):
+            if isinstance(headers, (str, bytes, int, float)):
                 headers = [headers]
 
             # Note since reference was a dict key in head_names, each reference should be unique
