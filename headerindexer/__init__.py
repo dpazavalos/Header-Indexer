@@ -1,23 +1,20 @@
 """Administrator object to manage data objects and imports, and coordinate operations"""
 # todo rewrite function arguments (google style), add type defs
 
-from .hi_objects import BUILD as _BUILD
+from ._hi_objects import HeaderIndexerEngine
 from typing import Union, List, Dict, Iterable
 
 
 class Indexer:
     """Actual runner"""
 
-    def __init__(self, allow_duplicates=True):
+    def __init__(self, allow_duplicates=False):
         """
 
         """
 
-        self.indexer = _BUILD.new_header_indexer_core()
+        self.indexer = HeaderIndexerEngine()
         """Core services of our header indexing """
-
-        self.fixer = None
-        """Fixing services, loaded if header not found"""
 
         self.allow_duplicates = allow_duplicates
         """Optional setting to allow duplicate header indexes, otherwise will prompt for fix"""
@@ -30,18 +27,11 @@ class Indexer:
         self.indexer.work.gen_ndx_calc(sheet_headers, head_names)
 
         # Begin identifying any errors in the parsing
-        self.indexer.errors.set()
         self.indexer.check_nonindexed()
+        self.indexer.query_fix_nonindexed()
+
         if not self.allow_duplicates:
             self.indexer.check_duplicates()
-
-        print(self.indexer.work.matrix_headers_index_dict)
-        input()
-
-        # Prompt to fix
-        if self.indexer.errors.error_exists:
-            if not self.fixer:
-                self.fixer = _BUILD.new_fixer_obj()
-            self.fixer.query_fix_nonindexed()
+            self.indexer.query_fix_duplicates()
 
         return self.indexer.work.ndx_calc
